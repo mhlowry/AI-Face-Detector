@@ -9,7 +9,9 @@ const ImageLinkForm = (props) => {
             <div className="center ph5 w-3">
                 <input 
                     onChange={props.onChange} 
-                    className="f4 pa2 w-70 center" type='text'>
+                    className="f4 pa2 w-70 center" 
+                    type='text'
+                    placeholder="Image URL">
                 </input>
                 <button 
                     onClick={props.onSubmit} 

@@ -16,3 +16,7 @@ code {
 button {
   cursor: pointer;
 }
+
+img[src=""] {
+    display: none;
+}
