@@ -6,12 +6,14 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import { useState } from 'react';
+import SignIn from './components/SignIn/SignIn';
 
 function App() {
     const [input, updateInput] = useState('');
     const [imageURL, setImageURL] = useState('');
     const [boxes, setBoxes] = useState([]);
     const [aspectRatio, setAspectRatio] = useState(1);
+    const [route, setRoute] = useState('signin');
     const PAT = 'e4709956eb984194878fcd63cd8adbca';
     const USER_ID = 'mhlowry';
     const APP_ID = 'ai-face-detect';
@@ -105,13 +107,22 @@ function App() {
             });
     }
 
+    const onRouteChange = (route) => {
+      setRoute(route);
+    }
+
     return (
         <div className="App">
-            <Navigation />
-            <Logo />
-            <ImageLinkForm onChange={onInputChange} onSubmit={onSubmit} />
-            <FaceRecognition boxes={boxes} imageURL={imageURL} aspectRatio={aspectRatio} />
-            <Rank />
+            <Navigation onRouteChange={onRouteChange}/>
+            { route === 'signin' 
+              ? <SignIn onRouteChange={onRouteChange}/> 
+              : <div>
+                  <Logo />
+                  <ImageLinkForm onChange={onInputChange} onSubmit={onSubmit} />
+                  <FaceRecognition boxes={boxes} imageURL={imageURL} aspectRatio={aspectRatio} />
+                  <Rank />
+                </div>
+            }
         </div>
     );
 }
