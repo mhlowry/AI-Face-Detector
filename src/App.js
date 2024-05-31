@@ -7,6 +7,7 @@ import Rank from './components/Rank/Rank';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import { useState } from 'react';
 import SignIn from './components/SignIn/SignIn';
+import Register from './components/Register/Register';
 
 function App() {
     const [input, updateInput] = useState('');
@@ -14,6 +15,7 @@ function App() {
     const [boxes, setBoxes] = useState([]);
     const [aspectRatio, setAspectRatio] = useState(1);
     const [route, setRoute] = useState('signin');
+    const [isSignedIn, setIsSignedIn] = useState(false);
     const PAT = 'e4709956eb984194878fcd63cd8adbca';
     const USER_ID = 'mhlowry';
     const APP_ID = 'ai-face-detect';
@@ -51,7 +53,7 @@ function App() {
         rightCol: right_col * width,
         bottomRow: bottom_row * height
     }
-}
+    }
 
 
     const onSubmit = (event) => {
@@ -108,20 +110,28 @@ function App() {
     }
 
     const onRouteChange = (route) => {
+      if (route === 'signout') {
+        setIsSignedIn(false);
+      } else if (route === 'home') {
+        setIsSignedIn(true);
+      }
+      
       setRoute(route);
     }
 
     return (
         <div className="App">
-            <Navigation onRouteChange={onRouteChange}/>
-            { route === 'signin' 
-              ? <SignIn onRouteChange={onRouteChange}/> 
-              : <div>
+            <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange}/>
+            { route === 'home' 
+              ? <div>
                   <Logo />
                   <ImageLinkForm onChange={onInputChange} onSubmit={onSubmit} />
                   <FaceRecognition boxes={boxes} imageURL={imageURL} aspectRatio={aspectRatio} />
                   <Rank />
                 </div>
+              : ( (route === 'signin' || route === 'signout')
+                  ? <SignIn onRouteChange={onRouteChange}/> 
+                  : <Register onRouteChange={onRouteChange} />)      
             }
         </div>
     );
