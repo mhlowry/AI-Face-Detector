@@ -8,6 +8,14 @@ import { useState } from 'react';
 import SignIn from './components/SignIn/SignIn';
 import Register from './components/Register/Register';
 
+const initialUserState = {
+        id: '',
+        name: '',
+        email: '',
+        count: 0,
+        joined: ''
+    };
+
 function App() {
     const [input, updateInput] = useState('');
     const [imageURL, setImageURL] = useState('');
@@ -101,12 +109,18 @@ function App() {
                                     id: user.id
                                 })
                             })
-                            .then(response => response.json())
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
                             .then(count => {
                                 // Update user count here
-                                setUser(oldState => ({ ...oldState, count: count }));
+                                setUser(oldState => ({ ...oldState, count: count.count }));
                             })
                             .catch(err => console.log('Error updating count:', err));
+
                         }
 
                         const regions = result.outputs[0].data.regions;
@@ -130,7 +144,7 @@ function App() {
 
     const onRouteChange = (route) => {
         if (route === 'signout') {
-            setIsSignedIn(false);
+            signOut();
         } else if (route === 'home') {
             setIsSignedIn(true);
         }
@@ -145,6 +159,14 @@ function App() {
             count: data.count,
             joined: data.joined
         });
+    }
+
+    const signOut = () => {
+        setIsSignedIn(false);
+        setBoxes([]);
+        setImageURL('');
+        setAspectRatio(1);
+        setUser(initialUserState);
     }
 
     return (
