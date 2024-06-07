@@ -2,6 +2,11 @@ import express from 'express';
 import bcrypt from 'bcrypt-nodejs';
 import cors from 'cors';
 import knex from 'knex';
+import handleRegister from './controllers/register.js';
+import handleSignIn from './controllers/signin.js';
+import fetchRoot from './controllers/root.js';
+import fetchProfile from './controllers/profile.js';
+import updateImage from './controllers/image.js';
 
 const app = express();
 app.use(express.json());
@@ -18,101 +23,17 @@ const db = knex({
   },
 });
 
-app.get('/', (req, res) => {
-    db('users').select().then(data => {
-        res.json(data);
-    })
-});
+// Get 
+app.get('/', fetchRoot(db));
+app.get('/profile/:id', fetchProfile(db)); 
 
-app.post('/signin', (req, res) => {
-    const { email, password } = req.body;
+// Post
+app.post('/signin', handleSignIn(bcrypt, db));
+app.post('/register', handleRegister(bcrypt, db));
 
-    db.select('email', 'hash').from('login')
-        .where({ email })
-        .then(data => {
-            const isValid = bcrypt.compareSync(password, data[0].hash);
-            if (isValid) {
-                return db.select('*').from('users')
-                .where({ email })
-                .then(user => {
-                    res.json(user[0]);
-                })
-                .catch(err => res.status(400).json('unable to get user'));   
-            }
-            else res.status(400).json('wrong credentials');
-        })
-        .catch(err => res.status(400).json('wrong credentials'));
-});
-
-app.post('/register', (req, res) => {
-    const { email, name, password } = req.body;
-    var hash = bcrypt.hashSync(password);
-    db.transaction(trx => {
-        trx.insert({
-            hash: hash,
-            email: email,
-        })
-        .into('login')
-        .returning('email')
-        .then(loginEmail => {
-            trx('public.users')
-            .returning('*')
-            .insert({
-                email: loginEmail[0].email,
-                name: name,
-                joined: new Date() 
-            })
-            .then(user => {
-                res.json(user[0])
-            })
-            .catch(err => res.status(400).json('Email already exists'))
-        })
-        .then(trx.commit)
-        .catch(trx.rollback)
-    });
+// Put
+app.put('/image', updateImage(db));
     
-    
-});
-
-app.get('/profile/:id', (req, res) => {
-    const { id } = req.params;
-
-    db.select().from('public.users')
-    .where({ id })
-    .then(user => {
-        console.log(user[0]);
-        res.json(user[0]);
-    })
-    .catch(() => res.status(404).json('no such user'))
-});
-
-app.put('/image', (req, res) => {
-    const { id } = req.body;
-    db('users').where('id', '=', id)
-    .increment('count', 1)
-    .returning('count')
-    .then(count => {
-        res.json(count[0])})
-    .catch(err => res.status(400).json('unable to get count'))
-    });
-    
-
 app.listen(3001, () => {
     console.log("app is running on port 3001");
 });
-
-const findUser = (id) => {
-    return database.users.find(user => user.id === id);
-}
-
-// bcrypt.hash("bacon", null, null, function(err, hash) {
-//     // Store hash in your password DB.
-// });
-
-// // Load hash from your password DB.
-// bcrypt.compare("bacon", hash, function(err, res) {
-//     // res == true
-// });
-// bcrypt.compare("veggies", hash, function(err, res) {
-//     // res = false
-// });
