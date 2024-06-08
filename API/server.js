@@ -36,6 +36,6 @@ app.post('/register', handleRegister(bcrypt, db));
 // Put
 app.put('/image', updateImage(db));
     
-app.listen(3001, () => {
-    console.log("app is running on port 3001");
+app.listen(process.env.PORT || 3001, () => {
+    console.log(`app is running on port ${process.env.PORT}`);
 });
