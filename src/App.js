@@ -12,7 +12,7 @@ const initialUserState = {
         id: '',
         name: '',
         email: '',
-        count: 0,
+        entries: 0,
         joined: ''
     };
 
@@ -27,7 +27,7 @@ function App() {
         id: '',
         name: '',
         email: '',
-        count: 0,
+        entries: 0,
         joined: ''
     });
     const PAT = 'e4709956eb984194878fcd63cd8adbca';
@@ -115,11 +115,11 @@ function App() {
                                 }
                                 return response.json();
                             })
-                            .then(count => {
-                                // Update user count here
-                                setUser(oldState => ({ ...oldState, count: count.count }));
+                            .then(entries => {
+                                // Update user entries here
+                                setUser(oldState => ({ ...oldState, entries: entries.entries }));
                             })
-                            .catch(err => console.log('Error updating count:', err));
+                            .catch(err => console.log('Error updating entries:', err));
 
                         }
 
@@ -156,7 +156,7 @@ function App() {
             id: data.id,
             name: data.name,
             email: data.email,
-            count: data.count,
+            entries: data.entries,
             joined: data.joined
         });
     }
@@ -177,7 +177,7 @@ function App() {
                   <Logo />
                   <ImageLinkForm onChange={onInputChange} onSubmit={onSubmit} />
                   <FaceRecognition boxes={boxes} imageURL={imageURL} aspectRatio={aspectRatio} />
-                  <Rank name={user.name} count={user.count}/>
+                  <Rank name={user.name} entries={user.entries}/>
                 </div>
               : ( (route === 'signin' || route === 'signout')
                   ? <SignIn onRouteChange={onRouteChange} loadUser={loadUser}/> 

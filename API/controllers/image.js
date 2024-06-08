@@ -1,11 +1,11 @@
 const updateImage = db => (req, res) => {
     const { id } = req.body;
     db('users').where('id', '=', id)
-    .increment('count', 1)
-    .returning('count')
-    .then(count => {
-        res.json(count[0])})
-    .catch(err => res.status(400).json('unable to get count'))
+    .increment('entries', 1)
+    .returning('entries')
+    .then(entries => {
+        res.json(entries[0])})
+    .catch(err => res.status(400).json('unable to get entries'))
 };
 
 export default updateImage;
