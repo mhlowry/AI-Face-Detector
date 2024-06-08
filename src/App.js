@@ -102,7 +102,7 @@ function App() {
                     .then(response => response.json())
                     .then(result => {
                         if (result) {
-                            fetch('http://localhost:3001/image', {
+                            fetch('https://ai-face-detector-backend.onrender.com/image', {
                                 method: 'put',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
