@@ -179,6 +179,7 @@ function App() {
                   <FaceRecognition boxes={boxes} imageURL={imageURL} aspectRatio={aspectRatio} />
                   <Rank name={user.name} entries={user.entries}/>
                 </div>
+                
               : ( (route === 'signin' || route === 'signout')
                   ? <SignIn onRouteChange={onRouteChange} loadUser={loadUser}/> 
                   : <Register onRouteChange={onRouteChange} loadUser={loadUser}/>)      

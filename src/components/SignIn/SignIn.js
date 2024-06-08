@@ -31,6 +31,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
     }
 
     return (
+        <div className="flex-column center" style={{ height: '80vh'}}>
         <article className="br3 shadow-5 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 center">
             <main className="pa4 black-80">
                 <div className="measure">
@@ -75,6 +76,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
                 </div>
             </main>
         </article>
+        </div>
     );
 }
 
