@@ -17,7 +17,7 @@ const db = knex({
   connection: {
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
-    host: process.env.DATABASE_HOSE,
+    host: process.env.DATABASE_HOST,
     port: '5432',
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PW,
@@ -35,3 +35,7 @@ app.post('/register', handleRegister(bcrypt, db));
 
 // Put
 app.put('/image', updateImage(db));
+    
+app.listen(process.env.PORT || 4000, () => {
+    console.log(`app is running on port ${process.env.PORT}`);
+});
