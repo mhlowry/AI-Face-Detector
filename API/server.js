@@ -15,19 +15,19 @@ app.use(cors());
 const db = knex({
   client: 'pg',
   connection: {
-    connectionString: process.env.DATABASE_URL,
+    connectionString: 'postgres://ai_face_db_user:bHl9jF1ZT9a3SO4OGylExq0Jc2uTTpyp@dpg-cpia5jsf7o1s73bep14g-a/ai_face_db',
     ssl: { rejectUnauthorized: false },
-    host: process.env.DATABASE_HOST,
+    host: 'dpg-cpia5jsf7o1s73bep14g-a',
     port: '5432',
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PW,
-    database: process.env.DATABASE_DB,
+    user: 'ai_face_db_user',
+    password: 'bHl9jF1ZT9a3SO4OGylExq0Jc2uTTpyp',
+    database: 'ai_face_db',
   }
-});
+});  
 
 // Get 
 app.get('/', fetchRoot(db));
-app.get('/profile/:id', fetchProfile(db)); 
+app.get('/profile/:id', fetchProfile(db));
 
 // Post
 app.post('/signin', handleSignIn(bcrypt, db));
@@ -36,6 +36,6 @@ app.post('/register', handleRegister(bcrypt, db));
 // Put
 app.put('/image', updateImage(db));
     
-app.listen(process.env.PORT || 4000, () => {
-    console.log(`app is running on port ${process.env.PORT}`);
+app.listen(4000, () => {
+    console.log(`app is running on port 4000`);
 });
