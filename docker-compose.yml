@@ -1,6 +1,8 @@
-name: ai-face-detector
+version: '3.8'
 
 services:
+
+  # Frontend website
   frontend:
     container_name: frontend
     build: ./
@@ -8,16 +10,13 @@ services:
     working_dir: /app
     ports:
       - "3000:3000"
-    develop:
-      watch:
-        - action: sync
-          path: ./src
-          target: ./app
-          ignore:
-            - node_modules/
-            - API/
-        - action: rebuild
-          path: ./API/package.json
+    volumes:
+      - ./:/app
+    environment:
+      NODE_ENV: development
+    restart: unless-stopped
+
+  # Backend API
   api:
     container_name: backend
     build: ./API
@@ -25,12 +24,38 @@ services:
     working_dir: /api
     ports:
       - "4000:4000"
-    develop:
-      watch:
-        - action: sync
-          path: ./API
-          target: ./api
-        - action: rebuild
-          path: package.json
-        
-    
+    environment:
+      POSTGRES_URI: postgres://sally:secret@postgres:5432/smart-brain-docker
+    depends_on:
+      - postgres
+    volumes:
+      - ./API:/api
+    restart: unless-stopped
+
+  # Postgres
+  postgres:
+    build: ./postgres
+    environment:
+      POSTGRES_USER: sally
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: smart-brain-docker
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # pgAdmin
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres-data:

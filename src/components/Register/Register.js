@@ -10,7 +10,7 @@ const Register = ({ onRouteChange, loadUser }) => {
     const updatePassword = (event) => setPassword(event.target.value);
 
     const onSubmitRegister = () => {
-        fetch('https://ai-face-detector-backend.onrender.com/register', {
+        fetch('http://localhost:4000/register', {
             method: 'post',
             headers: {'Content-Type' : 'application/json'},
             body: JSON.stringify({
