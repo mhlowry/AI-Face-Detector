@@ -12,11 +12,17 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-console.log(bcrypt.hashSync('password'));
-
 const db = knex({
   client: 'pg',
-  connection: process.env.POSTGRES_URI
+  connection: {
+    connectionString: 'postgres://ai_face_db_user:bHl9jF1ZT9a3SO4OGylExq0Jc2uTTpyp@dpg-cpia5jsf7o1s73bep14g-a/ai_face_db',
+    ssl: { rejectUnauthorized: false },
+    host: 'dpg-cpia5jsf7o1s73bep14g-a',
+    port: '5432',
+    user: 'ai_face_db_user',
+    password: 'bHl9jF1ZT9a3SO4OGylExq0Jc2uTTpyp',
+    database: 'ai_face_db',
+  }
 });  
 
 // Get 
