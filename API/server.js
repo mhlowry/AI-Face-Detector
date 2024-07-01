@@ -7,7 +7,9 @@ import handleSignIn from './controllers/signin.js';
 import fetchRoot from './controllers/root.js';
 import fetchProfile from './controllers/profile.js';
 import updateImage from './controllers/image.js';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -16,7 +18,7 @@ const db = knex({
   client: 'pg',
   connection: {
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
+    // ssl: { rejectUnauthorized: false },
     host: process.env.DATABASE_HOST,
     port: '5432',
     user: process.env.DATABASE_USER,
@@ -36,6 +38,6 @@ app.post('/register', handleRegister(bcrypt, db));
 // Put
 app.put('/image', updateImage(db));
     
-app.listen(process.env.PORT || 4000, () => {
-    console.log(`app is running on port ${process.env.PORT}`);
-});
+app.listen(4000, () => {
+    console.log(`backend is running on port 4000`)
+})

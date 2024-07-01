@@ -13,7 +13,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
     }
 
     const onSubmitSignin = () => {
-        fetch('https://ai-face-detector-backend.onrender.com/signin', {
+        fetch('http://localhost:4000/signin', {
             method: 'post',
             headers: {'Content-Type' : 'application/json'},
             body: JSON.stringify({
